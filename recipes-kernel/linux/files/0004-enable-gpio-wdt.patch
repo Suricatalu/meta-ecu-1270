@@ -1,0 +1,48 @@
+From 4135f4672898eedc3f33ae86611de97475a45527 Mon Sep 17 00:00:00 2001
+From: wade <wade.lin@advantech.com.tw>
+Date: Wed, 8 Jul 2026 09:56:00 +0000
+Subject: [PATCH] enable-gpio-wdt
+
+Signed-off-by: wade <wade.lin@advantech.com.tw>
+---
+ arch/arm64/boot/dts/ti/k3-j722s-ecu1270.dts | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/ti/k3-j722s-ecu1270.dts b/arch/arm64/boot/dts/ti/k3-j722s-ecu1270.dts
+index 43f98851d6ff..d9ea91088e88 100644
+--- a/arch/arm64/boot/dts/ti/k3-j722s-ecu1270.dts
++++ b/arch/arm64/boot/dts/ti/k3-j722s-ecu1270.dts
+@@ -343,7 +343,6 @@ watchdog-gpio {
+ 		pinctrl-0 = <&watchdog_gpio_pins_default>;
+         always-running;
+         gpios = <&main_gpio0 6 GPIO_ACTIVE_LOW>;
+-        wdt_en-gpios = <&main_gpio0 8 GPIO_ACTIVE_HIGH>;
+         hw_algo = "toggle";
+         hw_margin_ms = <1500>;
+         status = "okay";
+@@ -599,7 +598,7 @@ J722S_IOPAD(0x019c, PIN_INPUT, 7) /* (B25) MCASP0_AXR1.GPIO1_9 */
+ 	watchdog_gpio_pins_default: watchdog-gpio-default-pins {
+ 		pinctrl-single,pins = <
+ 			J722S_IOPAD(0x0018, PIN_OUTPUT, 7) /* (L25) OSPI0_D3.GPIO0_6 WDI# */
+-			J722S_IOPAD(0x0020, PIN_OUTPUT, 7) /* (M26) OSPI0_D5.GPIO0_8 WDI_EN */
++			J722S_IOPAD(0x0020, PIN_OUTPUT_PULLDOWN, 7) /* (M26) OSPI0_D5.GPIO0_8 WDI_EN */
+ 		>;
+ 	};
+ };
+@@ -608,6 +607,13 @@ &main_gpio0 {
+ 	status = "okay";
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&main_gpio0_pins_default>;
++
++	WDI_EN { 
++		gpio-hog;
++		gpios = <8 0>;
++		output-low;
++		line-name = "WDI_EN";
++	};
+ };
+ 
+ &main_gpio1 {
+-- 
+2.25.1
+
